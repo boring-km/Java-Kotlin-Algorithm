@@ -8,6 +8,7 @@ fun main() {
     var br = BufferedReader(InputStreamReader(System.`in`))
     var number = Integer.parseInt(br.readLine())
     var array = IntArray(number)
+    // Arrays.sort
     for (i in 0..number-1) {
         array[i] = Integer.parseInt(br.readLine())
     }
