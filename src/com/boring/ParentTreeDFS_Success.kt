@@ -3,10 +3,10 @@ package com.boring
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-var array:Array<ArrayList<Int>>? = null
-var v = 0
-var visited:BooleanArray? = null
-var parent: IntArray? = null
+private var array:Array<ArrayList<Int>>? = null
+private var v = 0
+private var visited:BooleanArray? = null
+private var parent: IntArray? = null
 /*
     질문 참고: https://www.acmicpc.net/board/view/41682
  */
@@ -35,7 +35,7 @@ fun main() {
     }
 }
 // dfs로 풀기
-fun dfs(node: Int) {
+private fun dfs(node: Int) {
     // child는 해당 인덱스에 있는 ArrayList<Int>
     val child = array!![node]
     // 리스트에 담겨진 만큼
