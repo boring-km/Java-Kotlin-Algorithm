@@ -23,27 +23,30 @@ fun main() {
         val first = Integer.parseInt(temp[0])
         val second = Integer.parseInt(temp[1])
         // add를 이용해 추가하는 방식
-        array!![first].add(second)// = IntArray(1){second}
-        array!![second].add(first)// = IntArray(1){first}
+        // 두 정점이 각각 연결됨 (그래프)
+        array!![first].add(second)
+        array!![second].add(first)
     }
+    // 루트 1 방문
     visited!![1] = true
-
+    // 1부터 dfs 탐색
     dfs(1)
-
+    // 결과 출력
     for (i in 2..v) {
         println(parent!![i])
     }
 }
 // dfs로 풀기
 private fun dfs(node: Int) {
-    // child는 해당 인덱스에 있는 ArrayList<Int>
+    // child는 해당 인덱스(노드)와 연결되어있는 ArrayList<Int>(노드 집합)
+    //
     val child = array!![node]
-    // 리스트에 담겨진 만큼
-    for (c in child) {
-        if (!visited!![c]) {
-            parent!![c] = node
-            visited!![c] = true
-            dfs(c)
+    // 리스트에 담겨진 만큼(점이 연결된 갯수 만큼)
+    for (c in child) {// c는 연결되어있는 점(노드)
+        if (!visited!![c]) {// 방문한 노드가 아니면?
+            parent!![c] = node // 방문하지 않은 이 노드의 부모노드를 현재 노드로 설정
+            visited!![c] = true // 방문~
+            dfs(c) // 재귀
         }
     }
 }
