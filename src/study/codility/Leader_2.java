@@ -1,36 +1,41 @@
 package study.codility;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Stack;
 
 public class Leader_2 {
     public static void main(String[] args) {
         System.out.println(solution(new int[]{1, 2, 1, 1, 2, 1}));
     }
 
+    // https://myung6024.tistory.com/55
     public static int solution(int[] A) {
-        int n = A.length;
-        int answer = 0;
-        for (int k = 0; k < n; k++) {
-            Map<Integer, Integer> frontMap = new HashMap<>();
-            Map<Integer, Integer> backMap = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                if (i <= k) {
-                    int saved = frontMap.getOrDefault(A[i], 0);
-                    frontMap.put(A[i], saved+1);
-                } else {
-                    int saved = backMap.getOrDefault(A[i], 0);
-                    backMap.put(A[i], saved+1);
-                }
-            }
-            int backSize = n - k-1;
-            int frontCount = frontMap.getOrDefault(A[k], 0);
-            int backCount = backMap.getOrDefault(A[k], 0);
-            if (frontCount > k / 2 && (backCount > backSize / 2 || backSize == 0)) {
-                answer++;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < A.length; i++) {
+            if (stack.isEmpty() || stack.peek() == A[i]) {
+                stack.push(A[i]);
+            } else {
+                stack.pop();
             }
         }
+        if (stack.isEmpty()) {
+            return 0;
+        }
+        int num = stack.pop();
+        int[] B = new int[A.length];
+        int ncnt = 0;
+        for (int i = 0; i < A.length; i++) {
+            if (A[i] == num) {
+                ncnt += 1;
+            }
+            B[i] = ncnt;
+        }
+        int ans = 0;
+        for (int i = 1; i < A.length; i++) {
+            if (B[i - 1] >= i / 2 + 1 && B[A.length - 1] - B[i - 1] >= (A.length - i) / 2 + 1) {
+                ans++;
+            }
+        }
+        return ans;
 
-        return answer;
     }
 }
