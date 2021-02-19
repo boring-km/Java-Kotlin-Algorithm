@@ -8,36 +8,21 @@ public class StackAndQueue_2 {
     }
 
     public static int solution(int[] A, int[] B) {
-        int N = A.length;
-        Stack<Integer> upStack = new Stack<>();
-        Stack<Integer> downStack = new Stack<>();
-        int lastStream = B[0];
-        if (lastStream == 0) {
-            upStack.add(A[0]);
-        } else {
-            downStack.add(A[0]);
-        }
+        Stack<Integer> down = new Stack<>();
+        int lastSize;
+        int aliveCount = 0;
 
-        for (int i = 1; i < N; i++) {
-            if (B[i] == 0) {
-                upStack.add(A[i]);
-                if (lastStream == 1) {
-                    int lastFish = downStack.peek();
-                    if (lastFish < A[i]) {
-                        downStack.pop();
-                        lastStream = 0;
-                    }
-                    if (lastFish > A[i]) {
-                        upStack.pop();
-                        lastStream = 1;
-                    }
+        for (int i = 0; i < A.length; i++) {
+            if (B[i] == 1) down.push(A[i]); // 내려가는 물고기는 스택에 추가
+            else {
+                while (!down.isEmpty()) {   // 내려가는 물고기가 없을 때까지
+                    lastSize = down.peek(); // 마지막 내려가는 물고기 추가
+                    if (lastSize > A[i]) break; // 만난 물고기가 더 작으면 잡아먹음
+                    else down.pop();        // 만난 물고기가 더 크면 잡아먹힘
                 }
-            } else {
-                downStack.add(A[i]);
-                lastStream = 1;
+                if (down.isEmpty()) aliveCount++;   // 내려가는 물고기가 없으면 생명 포인트 + 1 (내려가는 물고기를 잡고 살아난 물고기)
             }
         }
-
-        return upStack.size() + downStack.size();
+        return aliveCount + down.size();
     }
 }
