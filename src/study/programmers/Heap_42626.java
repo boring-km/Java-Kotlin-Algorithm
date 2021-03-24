@@ -10,7 +10,6 @@ public class Heap_42626 {
 
     public static int solution(int[] scoville, int K) {
         int answer = 0;
-//        Arrays.sort(scoville);
 
         PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(1000000);
         for (int j : scoville) {
