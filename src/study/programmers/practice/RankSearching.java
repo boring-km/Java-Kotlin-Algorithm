@@ -28,7 +28,7 @@ public class RankSearching {
 
         // Map 안에 List sorting
         for (Map.Entry<String, List<Integer>> entry : map.entrySet()){
-            entry.getValue().sort(Comparator.reverseOrder());
+            entry.getValue().sort(null);
         }
 
         int[] answer = new int[query.length];
