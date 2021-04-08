@@ -1,65 +1,31 @@
 package study.programmers.practice;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 public class Tuple {
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(solution("{{1,2,3},{2,1},{1,2,4,3},{2}}")));
+        System.out.println(Arrays.toString(solution("{{1,2,3},{2,1},{1,2,2,3},{2}}")));
     }
 
     public static int[] solution(String s) {
-        int[] answer;
-        int n = s.length();
-        String setString = s.substring(1, n-1);
-        n = setString.length();
+        Set<String> set = new HashSet<>();
+        // 알맹이만 쏙 뽑아내는 기가 막히는 방법
+        // 중괄호 제거
+        // 배열 사이마다 있는 comma 제거
+        String[] arr = s.replaceAll("[{]", " ").replaceAll("[}]", " ").trim().split(" , ");
 
-        StringBuilder cur = new StringBuilder();
-        HashMap<Integer, ArrayList<Integer>> map = new HashMap<>();
-        boolean isOpen = false;
+        // 배열이 들어간 문자열을 길이별로 정렬함
+        Arrays.sort(arr, Comparator.comparingInt(String::length));
 
-        for (int i = 0; i < n; i++) {
-            if (setString.charAt(i) == '{') {
-                isOpen = true;
-            } else if (setString.charAt(i) == '}') {
-                String[] array = cur.toString().split(",");
-                int size = array.length;
-                ArrayList<Integer> temp = new ArrayList<>();
-                for (String value : array) {
-                    temp.add(Integer.parseInt(value));
-                }
-                map.put(size, temp);
-                cur = new StringBuilder();
-                isOpen = false;
-            } else {
-                if (isOpen)
-                    cur.append(setString.charAt(i));
+        // 배열 길이가 곧 정답의 길이
+        int[] answer = new int[arr.length];
+        int idx = 0;
+        for(String s1 : arr) {
+            for(String s2 : s1.split(",")) {
+                // 집합에 값이 추가된다면 새로운 answer에 담음 (중복되는 원소가 주어지지 않기 때문에 set으로 처리 가능함..)
+                if(set.add(s2)) answer[idx++] = Integer.parseInt(s2);
             }
         }
-        ArrayList<Integer> previous = new ArrayList<>();
-        for (int key: map.keySet()) {
-            ArrayList<Integer> res = map.get(key);
-            ArrayList<Integer> next = new ArrayList<>(res);
-
-            int prev_size = previous.size();
-            int count = 0;
-            for (int i = 0; i < prev_size; i++) {
-                if (previous.contains(res.get(i))) {
-                    next.remove(i - count);
-                    count++;
-                } else {
-                    previous.add(res.get(i));
-                    break;
-                }
-            }
-            if (count == prev_size) previous.add(next.get(0));
-        }
-        answer = new int[previous.size()];
-        for (int i = 0; i < previous.size(); i++) {
-            answer[i] = previous.get(i);
-        }
-
         return answer;
     }
 }
