@@ -1,9 +1,8 @@
 package study.programmers.graph;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
-// 1시간 20분 -> 시간초과 (정확성 78.1%)
+// 1시간 20분 -> 시간초과 (정확성 81.3%)
 public class Delivery {
     public static void main(String[] args) {
         System.out.println(solution(
@@ -16,42 +15,51 @@ public class Delivery {
     }
 
     public static int solution(int N, int[][] road, int K) {
-        int answer = 1;
+        final int MAX = 1000000;
+        int answer = 0;
 
-        int[][] graph = new int[N + 1][N + 1];
-        for (int[] item : road) {
-            if (graph[item[0]][item[1]] != 0) {
-                graph[item[0]][item[1]] = Math.min(graph[item[0]][item[1]], item[2]);
-                graph[item[1]][item[0]] = Math.min(graph[item[1]][item[0]], item[2]);
-            } else {
-                graph[item[0]][item[1]] = item[2];
-                graph[item[1]][item[0]] = item[2];
+        int[][] adj = new int[N][N];
+        for (var a : adj) {
+            Arrays.fill(a, MAX);
+        }
+
+        for (int[] a : road) {
+            int x = a[0]-1;
+            int y = a[1]-1;
+            int w = a[2];
+            if (w < adj[x][y]) {
+                adj[x][y] = adj[y][x] = w;
             }
         }
-        int start = 1;
-        for (int end = 2; end <= N; end++) {
-            Queue<Integer> queue = new LinkedList<>();
-            Queue<Integer> lenQueue = new LinkedList<>();
-            queue.add(start);
-            lenQueue.add(0);
-            while (!queue.isEmpty()) {
-                int next = queue.poll();
-                int length = lenQueue.poll();
-                if (length > K) {
-                    continue;
-                }
-                if (next == end) {
-                    if (length <= K) answer++;
-                    break;
-                }
-                for (int i = 1; i <= N; i++) {
-                    if (graph[next][i] != 0) {
-                        queue.add(i);
-                        lenQueue.add(length + graph[next][i]);
-                    }
+
+        boolean[] visited = new boolean[N];
+        int[] dist = new int[N];
+        Arrays.fill(dist, MAX);
+        // 우선순위 큐 - Heap
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.comparingInt(o -> dist[o]));
+
+        dist[0] = 0;
+        pq.add(0);
+
+        while(!pq.isEmpty()) {
+            int curr = pq.poll();
+            if (visited[curr]) continue;
+
+            visited[curr] = true;
+            for (int i = 0; i < N; i++) {
+                if (adj[curr][i] == MAX) continue;
+
+                if (dist[i] > dist[curr] + adj[curr][i]) {
+                    dist[i] = dist[curr] + adj[curr][i];
+                    pq.offer(i);
                 }
             }
         }
+
+        for (var a : dist) {
+            if (a <= K) answer++;
+        }
+
         return answer;
     }
 }
