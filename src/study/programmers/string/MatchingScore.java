@@ -1,6 +1,6 @@
 package study.programmers.string;
 
-import java.util.HashMap;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,59 +16,60 @@ public class MatchingScore {
 
     public static int solution(String word, String[] pages) {
         int answer = 0;
-        HashMap<String, Integer> insideMap = new HashMap<>();
+        HashMap<String, Double> insideMap = new HashMap<>();
+        HashMap<String, Double> outsideMap = new HashMap<>();
         HashMap<String, Integer> indexMap = new HashMap<>();
-        HashMap<String, HashMap<String, Integer>> outsideMap = new HashMap<>();
+        word = word.toLowerCase();
 
         for (int i = 0; i < pages.length; i++) {
-            String page = pages[i];
-            Pattern wordPattern = Pattern.compile("[\\W|0-9]" + word.toLowerCase() + "[\\W|0-9]");
-            Matcher wordMatcher = wordPattern.matcher(page.toLowerCase());
-            String[] others = new String[0];
-            if (wordMatcher.find()) {
-                String text = wordMatcher.group();
-                others = page.toLowerCase().split(text.substring(1, text.length()-1));
+            String page = pages[i].toLowerCase();
+            Pattern wordPattern = Pattern.compile("\\b" + word + "\\b");
+            Matcher wordMatcher = wordPattern.matcher(page.replaceAll("[0-9]", " "));
+            int innerScore = 0;
+            while (wordMatcher.find()) {
+                innerScore++;
             }
-            int innerScore = others.length - 1;
 
-            // 내부링크 이름 구하기
-            Pattern keyPattern = Pattern.compile("<meta property=\"og:url\" content=\"(https://[\\S]*)\"/>");
-            Matcher keyMatcher = keyPattern.matcher(page.toLowerCase());
+            // 내부링크
+            Pattern keyPattern = Pattern.compile("<meta property=\"og:url\" content=\\S+/>");
+            Matcher keyMatcher = keyPattern.matcher(page.split("</head>")[0]);
             String key = "";
             if (keyMatcher.find()) {
-                key = keyMatcher.group().replace("<meta property=\"og:url\" content=\"https://", "").replace("\"/>", "");
+                key = keyMatcher.group().substring(32);
             }
-            insideMap.put(key, innerScore);
+            key = key.substring(0, key.length() - 2);
             indexMap.put(key, i);
+            insideMap.put(key, (double) innerScore);
 
-            // 외부링크 모두 구하기
-            HashMap<String, Integer> outsideLinks = new HashMap<>();
-            Pattern linkPattern = Pattern.compile("<a href=\"(https://[\\S]*)\">");
-            Matcher linkMatcher = linkPattern.matcher(page.toLowerCase());
+            // 외부링크
+            Pattern linkPattern = Pattern.compile("<a href=\\S+>");
+            Matcher linkMatcher = linkPattern.matcher(page);
+            ArrayList<String> links = new ArrayList<>();
             while (linkMatcher.find()) {
-                String text = linkMatcher.group().replace("<a href=\"https://", "").replace("\">", "");
-                outsideLinks.put(text, outsideLinks.getOrDefault(text, 0) + 1);
+                String link = linkMatcher.group();
+                link = link.substring(8);
+                link = link.substring(0, link.length() - 1);
+                if (link.charAt(link.length() - 1) == 'a') {  // <a href=""></a> 경우
+                    link = link.substring(0, link.length() - 4);
+                }
+                links.add(link);
             }
+            for (String link : links) {
+                outsideMap.put(link, outsideMap.getOrDefault(link, 0.0) + ((double) innerScore / links.size()));
+            }
+        }
 
-            outsideMap.put(key, outsideLinks);
-        }
-        double[] result = new double[pages.length];
-        for (String key : insideMap.keySet()) {
-            int index = indexMap.get(key);
-            result[index] += insideMap.get(key);
-            HashMap<String, Integer> map = outsideMap.get(key);
-            for (String outKey : map.keySet()) {
-                // 기본점수 / 외부 링크 수
-                double outScore = (double) insideMap.get(key) / map.size();
-                if (indexMap.containsKey(outKey))
-                    result[indexMap.get(outKey)] += outScore;
-            }
-        }
         double maxi = 0;
-        for (int i = 0; i < pages.length; i++) {
-            if (maxi < result[i]) {
-                answer = i;
-                maxi = result[i];
+        for (String key: insideMap.keySet()) {
+            double score = insideMap.get(key);
+            if(outsideMap.containsKey(key)) {
+                score += outsideMap.get(key);
+            }
+            if(score > maxi) {
+                answer = indexMap.get(key);
+                maxi = score;
+            } else if (score == maxi) {
+                answer = Math.min(answer, indexMap.get(key));
             }
         }
 
