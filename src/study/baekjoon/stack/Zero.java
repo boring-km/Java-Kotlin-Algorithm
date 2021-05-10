@@ -1,4 +1,4 @@
-package study.baekjoon;
+package study.baekjoon.stack;
 
 /*
 나코더 기장 재민이는 동아리 회식을 준비하기 위해서 장부를 관리하는 중이다.
