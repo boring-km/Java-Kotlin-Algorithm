@@ -1,4 +1,4 @@
-package study.programmers;
+package study.programmers.search;
 
 // 10분 정도
 public class Search_42842 {
