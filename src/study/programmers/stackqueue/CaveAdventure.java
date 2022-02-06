@@ -30,7 +30,7 @@ public class CaveAdventure {
             before[item[1]] = item[0];  // to -> from
         }
 
-        // order에 루트 경로를 넣게 되면 모든 경로를 탐색하기 어렵다.
+        // order의 목적지에 루트 노드(0)를 넣게 되면 x -> 0으로 가는 경로가 먼저가 될 수 없다. (0에서 시작하니까)
         if (before[0] != 0) return false;
 
         Stack<Integer> stack = new Stack<>();
@@ -40,7 +40,7 @@ public class CaveAdventure {
             int cur = stack.pop();
             if (!visited[cur]) {    // 방문한 적이 없는 노드
                 if (!visited[before[cur]]) {    // order에 있는 값이면 before[cur]가 0이 아니다.
-                    after[before[cur]] = cur;   // 이전 노드의 다음 노드로 cur 추가
+                    after[before[cur]] = cur;   // 이전 노드의 다음 노드로 cur 추가 (먼저 탐색)
                     continue;
                 }
                 visited[cur] = true;    // order에 없으면 방문
