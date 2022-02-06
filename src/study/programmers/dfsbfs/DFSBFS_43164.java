@@ -1,4 +1,4 @@
-package study.programmers;
+package study.programmers.dfsbfs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
