@@ -4,4 +4,4 @@
 .idea
 lib
 out
-Java-Kotlin-Algorithm.iml
+*.iml
