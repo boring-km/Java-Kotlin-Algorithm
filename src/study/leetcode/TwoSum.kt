@@ -1,6 +1,7 @@
 package study.leetcode
 
-class TwoSum {
+// https://leetcode.com/problems/two-sum/
+object TwoSum {
     fun twoSum(nums: IntArray, target: Int): IntArray {
 
         for (i in nums.indices) {
@@ -17,7 +18,6 @@ class TwoSum {
 }
 
 fun main() {
-    val twoSum: TwoSum = TwoSum()
-    val result: IntArray = twoSum.twoSum(intArrayOf(2, 7, 11, 15), 9)
+    val result: IntArray = TwoSum.twoSum(intArrayOf(2, 7, 11, 15), 9)
     result.forEach { num -> println(num) }
 }

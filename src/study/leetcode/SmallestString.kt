@@ -1,6 +1,7 @@
 package study.leetcode
 
-class SmallestString {
+// https://leetcode.com/problems/smallest-string-with-a-given-numeric-value
+object SmallestString {
     fun getSmallestString(n: Int, k: Int): String {
         val result = StringBuilder()
         var count = n
@@ -23,7 +24,7 @@ class SmallestString {
 
 
 fun main() {
-    val result = SmallestString().getSmallestString(5, 130)
+    val result = SmallestString.getSmallestString(5, 130)
     println(result)
 }
 

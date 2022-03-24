@@ -1,6 +1,7 @@
 package study.leetcode
 
-class RomanToInt {
+// https://leetcode.com/problems/roman-to-integer
+object RomanToInt {
     fun romanToInt(s: String): Int {
         var text = s
         var result = 0
@@ -53,6 +54,6 @@ class RomanToInt {
 }
 
 fun main() {
-   val result = RomanToInt().romanToInt("LVIII")
+   val result = RomanToInt.romanToInt("LVIII")
     println(result)
 }

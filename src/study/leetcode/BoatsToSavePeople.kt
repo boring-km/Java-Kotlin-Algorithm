@@ -2,6 +2,7 @@ package study.leetcode
 
 import java.util.*
 
+// https://leetcode.com/problems/boats-to-save-people/
 object BoatsToSavePeople {
     fun numRescueBoats(people: IntArray, limit: Int): Int {
         var result = 0
