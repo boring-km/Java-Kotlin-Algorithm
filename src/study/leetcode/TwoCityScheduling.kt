@@ -2,6 +2,7 @@ package study.leetcode
 
 import kotlin.math.abs
 
+// https://leetcode.com/problems/two-city-scheduling/
 object TwoCityScheduling {
     fun twoCitySchedCost(costs: Array<IntArray>): Int {
         var result = 0
