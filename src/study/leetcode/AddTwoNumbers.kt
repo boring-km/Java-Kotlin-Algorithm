@@ -1,5 +1,6 @@
 package study.leetcode
 
+// https://leetcode.com/problems/add-two-numbers/
 object AddTwoNumbers {
     fun addTwoNumbers(l1: ListNode?, l2: ListNode?): ListNode? {
 
@@ -27,6 +28,13 @@ object AddTwoNumbers {
             }
             b++
             right = right.next
+        }
+
+        for (i in 0..100) {
+            if (arr[i] >= 10) {
+                arr[i] -= 10
+                arr[i+1] += 1
+            }
         }
 
         val result = ListNode(arr[0])
@@ -66,10 +74,15 @@ fun main() {
     val first = ListNode(9)
     first.next = ListNode(9)
     first.next?.next = ListNode(9)
+    first.next?.next?.next = ListNode(9)
+    first.next?.next?.next?.next = ListNode(9)
+    first.next?.next?.next?.next?.next = ListNode(9)
+    first.next?.next?.next?.next?.next?.next = ListNode(9)
 
     val second = ListNode(9)
     second.next = ListNode(9)
     second.next?.next = ListNode(9)
+    second.next?.next?.next = ListNode(9)
     var result = AddTwoNumbers.addTwoNumbers(first, second)
 
     while (result?.`val` != null) {
