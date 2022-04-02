@@ -1,5 +1,6 @@
 package study.leetcode
 
+// https://leetcode.com/problems/longest-substring-without-repeating-characters
 object LongestSubstringWithoutRepeating {
     fun lengthOfLongestSubstring(s: String): Int {
         var result = 0

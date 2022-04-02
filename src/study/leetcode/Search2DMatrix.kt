@@ -1,5 +1,6 @@
 package study.leetcode
 
+// https://leetcode.com/problems/search-a-2d-matrix
 object Search2DMatrix {
     fun searchMatrix(matrix: Array<IntArray>, target: Int): Boolean {
 

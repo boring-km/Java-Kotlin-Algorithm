@@ -1,5 +1,6 @@
 package study.leetcode
 
+// https://leetcode.com/problems/longest-palindromic-substring
 object LongestPalindromicSubstring {
     fun longestPalindrome(s: String): String {
         if (s.length <= 1) {

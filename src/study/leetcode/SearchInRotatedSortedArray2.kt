@@ -1,5 +1,6 @@
 package study.leetcode
 
+// https://leetcode.com/problems/search-in-rotated-sorted-array-ii
 object SearchInRotatedSortedArray2 {
     fun search(nums: IntArray, target: Int): Boolean {
         val res = nums.find { num -> num == target }

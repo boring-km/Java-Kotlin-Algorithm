@@ -1,5 +1,6 @@
 package study.leetcode
 
+// https://leetcode.com/problems/find-the-duplicate-number
 object FindDuplicateNumber {
     fun findDuplicate(nums: IntArray): Int {
         val map = HashMap<Int, Int>()

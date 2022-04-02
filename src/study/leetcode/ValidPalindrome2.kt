@@ -1,5 +1,6 @@
 package study.leetcode
 
+// https://leetcode.com/problems/valid-palindrome-ii/
 object ValidPalindrome2 {
 
     // 문제의 좌표부터 확인
