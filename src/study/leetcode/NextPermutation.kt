@@ -1,44 +1,39 @@
 package study.leetcode
 
-
+// 문제: https://leetcode.com/problems/next-permutation/
+// 풀이: https://engkimbs.tistory.com/674
 object NextPermutation {
     fun nextPermutation(nums: IntArray): Unit {
+        var a = nums.size - 2
 
-        val sortedArray = nums.sorted()
+        while (a >= 0 && nums[a] >= nums[a+1]) {    // 뒤에 있는 숫자가 더 클 때까지 반복
+            a--
+        }
 
-        val list = ArrayList<Int>()
-        for (n in sortedArray) list.add(n)
-
-        val resultList = permutation(list).distinct()
-
-        for (i in resultList.indices) {
-            var isEqual = true
-            for (j in resultList[i].indices) {
-                if (nums[j] != resultList[i][j]) {
-                    isEqual = false
-                    break
-                }
+        if (a < 0) nums.reverse()   // 마지막 숫자가 더 컸다면 뒤집으면 된다.
+        else {
+            var b = a+1 // 발견한 숫자 다음부터 다시 숫자가 더 큰 수를 발견할 때까지
+            while (b < nums.size && (nums[b] - nums[a]) > 0) {
+                b++
             }
-            if (isEqual) {
-                if (i == resultList.size - 1) {
-                    resultList[0].toIntArray().copyInto(nums)
-                    break
-                } else {
-                    resultList[i + 1].toIntArray().copyInto(nums)
-                    break
-                }
+            swap(nums, a, b-1)  // 서로 위치 바꾸기
+            val copyOfRange = nums.copyOfRange(a + 1, nums.size)
+            val reversed = copyOfRange.reversed()
+            for (i in reversed.indices) {
+                nums[i+a+1] = reversed[i]
             }
         }
     }
-}
 
-fun <T> permutation(el: List<T>, fin: List<T> = listOf(), sub: List<T> = el): List<List<T>> {
-    return if (sub.isEmpty()) listOf(fin)
-    else sub.flatMap { permutation(el, fin + it, sub - it) }
+    private fun swap(nums: IntArray, i: Int, j: Int) {
+        val temp = nums[i]
+        nums[i] = nums[j]
+        nums[j] = temp
+    }
 }
 
 fun main() {
-    val arr = intArrayOf(1, 5, 1)
+    val arr = intArrayOf(1, 3, 2)
     val result = NextPermutation.nextPermutation(arr)
     arr.forEach { print("$it ") }
 }
