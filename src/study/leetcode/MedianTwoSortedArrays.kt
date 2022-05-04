@@ -4,36 +4,30 @@ object MedianTwoSortedArrays {
     fun findMedianSortedArrays(nums1: IntArray, nums2: IntArray): Double {
         val m = nums1.size
         val n = nums2.size
-        val len = m + n
-        return if (len % 2 == 0) {
-            val left = findKthHelper(nums1, 0, nums2, 0, len / 2).toDouble()
-            val right = findKthHelper(nums1, 0, nums2, 0, len / 2 + 1).toDouble()
-            (left + right) / 2
-        } else {
-            findKthHelper(nums1, 0, nums2, 0, len / 2 + 1).toDouble()
-        }
-    }
+        if (m > n) return findMedianSortedArrays(nums2, nums1)  // 길이 무조건 긴 array가 뒤로 가게 조절
 
-    private fun findKthHelper(arrA: IntArray, a: Int, arrB: IntArray, b: Int, k: Int): Int {
-        if (a >= arrA.size) {
-            return arrB[b + k - 1]
+        var low = 0
+        var high = m
+
+        while (low <= high) {
+            val pX = (low + high) / 2
+            val pY = (m + n + 1) / 2 - pX
+
+            val maxLeftX = (if (pX == 0) Int.MIN_VALUE else nums1[pX - 1]).toDouble()
+            val minRightX = (if (pX == m) Int.MAX_VALUE else nums1[pX]).toDouble()
+
+            val maxLeftY = (if (pY == 0) Int.MIN_VALUE else nums2[pY - 1]).toDouble()
+            val minRightY = (if (pY == n) Int.MAX_VALUE else nums2[pY]).toDouble()
+
+            if (maxLeftX <= minRightY && maxLeftY <= minRightX) {
+                return if ((m + n) % 2 != 0) Math.max(maxLeftX, maxLeftY) else ((Math.max(maxLeftX, maxLeftY) + Math.min(minRightX, minRightY)) / 2)
+            } else if (maxLeftX > minRightY) {
+                high = pX - 1
+            } else {
+                low = pX + 1
+            }
         }
-        if (b >= arrB.size) {
-            return arrA[a + k - 1]
-        }
-        if (k == 1) {
-            return Math.min(arrA[a], arrB[b])
-        }
-        // 이진 탐색을 한다.
-        val aMid = a + (k / 2) - 1
-        val bMid = b + (k / 2) - 1
-        val aVal = if (aMid >= arrA.size) Int.MAX_VALUE else arrA[aMid]
-        val bVal = if (bMid >= arrB.size) Int.MAX_VALUE else arrB[bMid]
-        return if (aVal <= bVal) {
-            findKthHelper(arrA, aMid + 1, arrB, b, k - k / 2)
-        } else {
-            findKthHelper(arrA, a, arrB, bMid + 1, k - k / 2)
-        }
+        return 0.0
     }
 }
 
