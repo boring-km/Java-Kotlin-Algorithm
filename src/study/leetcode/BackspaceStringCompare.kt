@@ -2,6 +2,7 @@ package study.leetcode
 
 import java.util.Stack
 
+// https://leetcode.com/problems/backspace-string-compare
 object BackspaceStringCompare {
     fun backspaceCompare(s: String, t: String): Boolean {
         val list_a = Stack<Char>()
