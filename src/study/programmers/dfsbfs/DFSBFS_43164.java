@@ -82,7 +82,7 @@ public class DFSBFS_43164 {
         return answer;
     }
 
-    public static String dfs(String start, String target, HashMap<String, ArrayList<String>> map) {
+    private static String dfs(String start, String target, HashMap<String, ArrayList<String>> map) {
 
         ArrayList<String> innerList = map.getOrDefault(target, new ArrayList<>());
         if (innerList.isEmpty()) {
