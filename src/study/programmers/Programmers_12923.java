@@ -8,37 +8,31 @@ public class Programmers_12923 {
 
         // 100 ~ 10000 구간을 구한다면...
 
-        for (long i = end; i >= begin; i--) {
+        for (long i = begin; i <= end ; i++) {
             // 10000개의 i 중에 1 ~ 10000000 사이의 수를 약수로 가지는 수가 있는지 찾기
-            answer[(int) (i - begin)] = (int) getDivisorAndFind(i);
+            answer[(int) (i - begin)] = getDivisorAndFind(i);
         }
 
         return answer;
     }
 
-    private static long getDivisorAndFind(long n) {
+    private static int getDivisorAndFind(long n) {
         if (n == 1) return 0;
-        long sqrt = (long) Math.sqrt(n);
+        long sqrt = (int) Math.sqrt(n);
         long temp = 1;
-        for (long i = 1; i <= sqrt; i++) {
+        for (long i = 2; i <= sqrt; i++) {
+            long mok = n / i;
+            if (mok > size) continue;
             if (n % i == 0) {
-                // i
-                if (i <= size && i != n) {
-                    temp = Math.max(temp, i);
-                }
-                if (n / i != i) {
-                    // n / i
-                    if (i <= size && n / i != n) {
-                        temp = Math.max(temp, n / i);
-                    }
-                }
+                temp = mok;
+                break;
             }
         }
-        return temp;
+        return (int) temp;
     }
 
     public static void main(String[] args) {
-        int[] result = solution(1, 10);
+        int[] result = solution(1000000000 - 100, 1000000000);
         for (int item : result) {
             System.out.print(item + ",");
         }
