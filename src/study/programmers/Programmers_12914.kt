@@ -2,29 +2,17 @@ package study.programmers
 
 private object Programmers_12914 {
     fun solution(n: Int): Long {
-        var answer: Long = 1
-        var count = n
-        // n = 10
-        // two x 0
-        // two x 1
-        // ...
-        // two x n / 2
-
-        for (i in 1 until n / 2 + 1) {
-            answer += combination(--count, i)
+        val dp = LongArray(n+2){0}
+        dp[1] = 1
+        dp[2] = 2
+        for (i in 3 until n+2) {
+            dp[i] = (dp[i-2] + dp[i-1]) % 1234567
         }
-
-        return answer %  1234567
-    }
-
-    fun combination(n: Int, k: Int): Int {
-        if (k == n) return 1
-        else if (k == 1) return n
-        else return combination(n - 1, k - 1) + combination(n - 1, k)
+        return dp[n]
     }
 }
 
 fun main() {
-    val result = Programmers_12914.solution(2000)
+    val result = Programmers_12914.solution(3)
     println(result)
 }
