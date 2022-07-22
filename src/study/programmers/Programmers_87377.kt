@@ -2,56 +2,53 @@ package study.programmers
 
 private object Programmers_87377 {
     fun solution(line: Array<IntArray>): Array<String> {
-        var answer: Array<String> = arrayOf<String>()
+        val n = line.size
+        val inf = Long.MAX_VALUE
+        val list = arrayListOf<LongArray>()
+        var minX = inf
+        var minY = inf
+        var maxX = -inf
+        var maxY = -inf
 
-        var listX = arrayListOf<DoubleArray>()
-        var listY = arrayListOf<DoubleArray>()
-        for (g in line) {
-            var a = g[0].toDouble() // 0
-            var b = g[1].toDouble() // -1
-            var c = g[2].toDouble() // 1
+        for (i in 0 until n - 1) {
+            for (j in i + 1 until n) {
+                val a = line[i][0].toLong()
+                val b = line[i][1].toLong()
+                val e = line[i][2].toLong()
+                val c = line[j][0].toLong()
+                val d = line[j][1].toLong()
+                val f = line[j][2].toLong()
 
-            var y1 = if (g[0] != 0) -(b / a) else 0.0
-            var y2 = -(c / a)
-            var x1 = if (g[1] != 0) -(a / b) else 0.0
-            var x2 = -(c / b)
+                val mod = a * d - b * c
+                if (mod == 0L) continue
 
-            listX.add(doubleArrayOf(y1, y2))
-            listY.add(doubleArrayOf(x1, x2))
+                val tx = b * f - e * d
+                val ty = e * c - a * f
+                if (tx % mod != 0L || ty % mod != 0L) continue
 
-        }
-        // ax + by + c = 0
-        // -(a1/b1)x - (c1/b1) = y
-        // -(a2/b2)x - -(a1/b1)x = - (c1/b1) - - (c2/b2)
-        val visited = HashMap<Int, Int>()
-        val ic = arrayListOf<IntArray>()
-        for (i in listY.indices) {
-            for (j in listY.indices) {
-                if (i != j) {
-                    val ya1 = listY[i][0]
-                    val ya2 = listY[i][1]
-                    val yb1 = listY[j][0]
-                    val yb2 = listY[j][1]
-                    val xa1 = listX[i][0]
-                    val xa2 = listX[i][1]
-                    val xb1 = listX[j][0]
-                    val xb2 = listX[j][1]
+                val x = tx / mod
+                val y = ty / mod
 
-                    val tx = if (ya1 != yb1) (yb2 - ya2) / (ya1 - yb1) else (yb2 - ya2)
-                    val ty = if (xa1 != xb1) (xb2 - xa2) / (xa1 - xb1) else (xb2 - xa2)
-                    if ((tx == tx.toInt().toDouble())
-                        && ty == ty.toInt().toDouble()
-                        && visited.getOrDefault(tx.toInt(), 100001) != ty.toInt()
-                    ) {
-                        ic.add(intArrayOf(tx.toInt(), ty.toInt()))
-                        visited[tx.toInt()] = ty.toInt()
-                    }
-                }
+                list.add(longArrayOf(x, y))
+                minX = Math.min(minX, x)
+                minY = Math.min(minY, y)
+                maxX = Math.max(maxX, x)
+                maxY = Math.max(maxY, y)
             }
         }
-        for (item in ic) {
-            item.forEach { print("$it, ") }
-            println()
+
+        val paper = Array((maxY - minY + 1).toInt()) { CharArray((maxX - minX + 1).toInt()) { '.' } }
+        list.forEach {
+            val y = it[1]
+            val x = it[0]
+            paper[(maxY - y).toInt()][(x - minX).toInt()] = '*'
+        }
+        val answer: Array<String> = Array(paper.size) { "" }
+
+        for (i in paper.indices) {
+            var temp = ""
+            paper[i].forEach { temp += it }
+            answer[i] = temp
         }
 
         return answer
