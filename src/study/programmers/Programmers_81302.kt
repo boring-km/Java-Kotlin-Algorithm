@@ -3,6 +3,7 @@ package study.programmers
 import java.util.LinkedList
 import java.util.Queue
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/81302
 private object Programmers_81302 {
 
     private val moves = arrayOf(arrayOf(1, 0), arrayOf(-1, 0), arrayOf(0, 1), arrayOf(0, -1))

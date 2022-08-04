@@ -1,7 +1,7 @@
 package study.programmers
 
 // https://school.programmers.co.kr/learn/courses/30/lessons/92334?language=kotlin
-object Programmers_92334 {
+private object Programmers_92334 {
     fun solution(id_list: Array<String>, report: Array<String>, k: Int): IntArray {
         val answer = IntArray(id_list.size)
         val map = HashMap<String, HashSet<String>>()

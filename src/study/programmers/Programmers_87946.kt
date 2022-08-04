@@ -1,7 +1,7 @@
 package study.programmers
 
 // https://school.programmers.co.kr/learn/courses/30/lessons/87946
-object Programmers_87946 {
+private object Programmers_87946 {
 
     private var answer = 0
     private lateinit var visited: BooleanArray

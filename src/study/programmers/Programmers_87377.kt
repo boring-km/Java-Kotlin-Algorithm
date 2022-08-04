@@ -1,5 +1,6 @@
 package study.programmers
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/87377
 private object Programmers_87377 {
     fun solution(line: Array<IntArray>): Array<String> {
         val n = line.size

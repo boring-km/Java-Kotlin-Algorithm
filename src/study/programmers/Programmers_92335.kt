@@ -1,5 +1,6 @@
 package study.programmers
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/92335
 private object Programmers_92335 {
     fun solution(n: Int, k: Int): Int {
         var answer = 0

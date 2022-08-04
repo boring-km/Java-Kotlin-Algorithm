@@ -1,5 +1,6 @@
 package study.programmers
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/12914
 private object Programmers_12914 {
     fun solution(n: Int): Long {
         val dp = LongArray(n+2){0}

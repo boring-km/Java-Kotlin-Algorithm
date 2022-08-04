@@ -1,6 +1,7 @@
 package study.programmers
 
-object Programmers_87390 {
+// https://school.programmers.co.kr/learn/courses/30/lessons/87390
+private object Programmers_87390 {
     fun solution(n: Int, left: Long, right: Long): IntArray {
 
         val list = arrayListOf<Int>()

@@ -1,5 +1,6 @@
 package study.programmers
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/68645
 private object Programmers_68645 {
     fun solution(n: Int): IntArray {
         val size = (1+n) * n / 2

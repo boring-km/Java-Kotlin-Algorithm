@@ -2,6 +2,7 @@ package study.programmers;
 
 import java.util.ArrayList;
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/12936
 public class Programmers_12936 {
 
     private static int[] solution(int n, long k) {

@@ -1,5 +1,6 @@
 package study.programmers
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/92341
 private fun solution(fees: IntArray, records: Array<String>): IntArray {
     val limit = fees[0]
     val base = fees[1]

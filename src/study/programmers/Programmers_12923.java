@@ -1,5 +1,6 @@
 package study.programmers;
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/12923
 public class Programmers_12923 {
     private static final int size = 10000000;
     private static int[] solution(long begin, long end) {

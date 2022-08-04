@@ -1,5 +1,6 @@
 package study.programmers
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/92342
 private object Programmers_92342 {
 
     var answer = intArrayOf(-1)
