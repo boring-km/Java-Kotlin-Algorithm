@@ -1,100 +1,116 @@
 package study.programmers;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+// https://school.programmers.co.kr/learn/courses/30/lessons/1830
 public class Programmers_1830 {
 
     // 규칙 1: 한 단어의 사이사이마다 같은 소문자 넣기
     // 규칙 2: 한 단어의 양 끝에 같은 소문자 넣기
-    private static String solution(String sentence) {
-        StringBuilder answer = new StringBuilder();
-        int size = sentence.length();
-        boolean wasBig = false;
+    private static String solution(String s) {
 
-        int start1 = -1;
-        int end1;
-        int start2 = -1;
-        int end2;
-        char rule1 = ' ';
-        char rule2 = ' ';
+        char[] sentence = s.toCharArray();
+        String invalid = "invalid";
 
-        Map<Character, Boolean> map = new HashMap<>();
-
-        for (int i = 0; i < size; i++) {
-            int c = sentence.charAt(i);
-
-            // 대문자
-            if (65 <= c && c <= 90) {
-                if (wasBig) {
-                    if (rule1 != ' ') {
-                        end1 = i;
-                        if (!map.containsKey(rule1)) {
-                            map.put(rule1, true);
-                        } else return "invalid";
-                        answer.append(sentence.substring(start1, end1).replaceAll(String.valueOf(rule1), ""));
-                        rule1 = ' ';
+        try {
+            Map<Character, List<Integer>> map = new LinkedHashMap<>();
+            int len = s.length();
+            for (int i = 0; i < len; i++) {
+                char c = sentence[i];
+                if (c >= 'a' && c <= 'z') {
+                    if (!map.containsKey(c)) {
+                        map.put(c, new ArrayList<>());
                     }
+                    map.get(c).add(i);
                 }
-                wasBig = true;
             }
-            // 소문자
-            else {
-                if (!wasBig) {
-                    // 앞에 소문자였거나 없거나 아무튼 규칙 2
-                    rule2 = (char) c;
-                    start2 = i;
+            StringBuilder answer = new StringBuilder();
+
+            int listSize, startChar, endChar;
+            int startString = 0, startWord = 0, endWord = 0, length = 0, rule = 0;
+            int startWordBefore = -1, endWordBefore = -1, startCharBefore = -1, endCharBefore = -1;
+
+            for (List<Integer> positions: map.values()) {
+                listSize = positions.size();
+                startChar = positions.get(0);
+                endChar = positions.get(listSize - 1);
+
+                if (listSize == 1 || listSize >= 3) { // 규칙 1만 해당됨
+                    for (int i = 1; i < listSize; i++) {
+                        // 규칙 1도 아니라면
+                        if (positions.get(i) - positions.get(i - 1) != 2) {
+                            return invalid;
+                        }
+                    }
+                    rule = 1;
                 } else {
-                    if (rule2 != ' ') {
-                        // 규칙 2 종료
-                        if (rule2 == (char) c) {
-                            end2 = i;
-                            if (start2 != 0) answer.append(" ");
-                            if (!map.containsKey(rule2)) {
-                                map.put(rule2, true);
-                            } else return "invalid";
-                            answer.append(sentence, start2 + 1, end2);
-                            rule2 = ' ';
-                        }
+                    // 규칙 1일수도 2일수도
+                    length = endChar - startChar;
+                    if (length == 2 && (startCharBefore < startChar && endChar < endCharBefore)) {
+                        rule = 1;
+                    } else if (length >= 2) {
+                        rule = 2;
                     } else {
-                        // 규칙 2가 적용이 안되고 있더라면 규칙 1이 되어야지
-                        if (rule1 == ' ') { // 적용 전이라면
-                            rule1 = (char) c;
-                            start1 = i - 1;
-                        } else if (rule1 != (char) c) {
-                            end1 = i;
-                            if (!map.containsKey(rule1)) {
-                                map.put(rule1, true);
-                            } else return "invalid";
-                            if (start1 != 0) answer.append(" ");
-                            answer.append(sentence.substring(start1, end1).replaceAll(String.valueOf(rule1), ""));
-                            rule1 = ' ';
-                            // 앞에가 규칙 1로 끝났다면 규칙 2 시작
-                            rule2 = (char) c;
-                            start2 = i;
-                        }
+                        return invalid;
                     }
                 }
-                wasBig = false;
+                if (rule == 1) { // 규칙 1은 앞뒤로 대문자까지 포함
+                    startWord = startChar - 1;
+                    endWord = endChar + 1;
+                    if (startWordBefore < startWord && endWord < endWordBefore) {
+                        if (startChar - startCharBefore == 2 && endCharBefore - endChar == 2) {
+                            continue;
+                        } else {
+                            return invalid;
+                        }
+                    }
+                } else {
+                    startWord = startChar;  // 시작 단어가 소문자부터
+                    endWord = endChar;  // 마지막 단어도 소문자부터
+                    if (startWordBefore < startWord && endWord < endWordBefore) {
+                        return invalid;
+                    }
+                }
+
+                if (endWordBefore >= startWord) {
+                    return invalid;
+                }
+
+                if (startString < startWord) {
+                    answer.append(getBigString(startString, startWord - 1, sentence)).append(" ");
+                }
+                answer.append(getBigString(startWord, endWord, sentence)).append(" ");
+                startWordBefore = startWord;
+                endWordBefore = endWord;
+                startCharBefore = startChar;
+                endCharBefore = endChar;
+                startString = endWord + 1;
+            }
+            if (startString < len) {
+                answer.append(getBigString(startString, len-1, sentence));
+            }
+            return answer.toString().trim();
+        } catch (Exception e) {
+            return invalid;
+        }
+    }
+
+    private static String getBigString(int start, int end, char[] sentence) {
+        StringBuilder result = new StringBuilder();
+        for (int i = start; i <= end; i++) {
+            char c = sentence[i];
+            if ('A' <= c && c <= 'Z') {
+                result.append(c);
             }
         }
-        if (rule1 != ' ') {
-            end1 = size;
-            if (!map.containsKey(rule1)) {
-                map.put(rule1, true);
-            } else return "invalid";
-            if (start1 != 0) answer.append(" ");
-            answer.append(sentence.substring(start1, end1).replaceAll(String.valueOf(rule1), ""));
-        }
-        if (rule2 != ' ') {
-            return "invalid";
-        }
-
-        return answer.toString();
+        return result.toString();
     }
 
     public static void main(String[] args) {
-        String result = solution("HaEaLaLaObWORLDb");
+        String result = solution("xKx");
         System.out.println(result);
     }
 }
