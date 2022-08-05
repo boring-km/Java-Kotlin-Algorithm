@@ -2,30 +2,24 @@ package study.leetcode
 
 private object CombinationSum4 {
 
-    private var answer = 0
-
     fun combinationSum4(nums: IntArray, target: Int): Int {
-        dfs(nums.sortedArray(), 0, target)
-        return answer
-    }
+        val dp = IntArray(target+1)
+        dp[0] = 1
 
-    fun dfs(nums: IntArray, cur: Int, target: Int) {
-
-        for (i in nums.indices) {
-            if (nums[i] + cur < target) {
-                // dfs
-                dfs(nums, nums[i] + cur, target)
-            } else if (nums[i] + cur == target) {
-                answer++
-                return
-            } else {
-                return
+        for (i in 1 .. target) {
+            nums.forEach {
+                // 핵심 dp 알고리즘 부분 (num으로 만들 수 있는 숫자를 1부터 target까지 저장하면서 구하기)
+                val diff = i - it
+                if (diff >= 0) {
+                    dp[i] += dp[diff]
+                }
             }
         }
+        return dp[target]
     }
 }
 
 fun main() {
-    val result = CombinationSum4.combinationSum4(intArrayOf(2, 1, 3), 10)
+    val result = CombinationSum4.combinationSum4(intArrayOf(2, 3), 35)
     println(result)
 }
