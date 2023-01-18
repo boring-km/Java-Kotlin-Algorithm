@@ -1,12 +1,7 @@
 package study.leetcode.new2023
 
-import java.util.*
-
 object MaximumSumCircularSubarray {
     fun maxSubarraySumCircular(nums: IntArray): Int {
-
-        val n = nums.size
-
         var total = 0
         var min = 0
         var max = 0
@@ -24,9 +19,10 @@ object MaximumSumCircularSubarray {
 
             total += nums[i]
         }
-        val answer = maxSum.coerceAtLeast(total - minSum)
-        return if (maxSum > 0) return answer
-        else tempMax
+        return if (maxSum > 0)
+            maxSum.coerceAtLeast(total - minSum)
+        else
+            tempMax
     }
 }
 
