@@ -3,41 +3,17 @@ package study.leetcode.graph
 object FindTheTownJudge {
     fun findJudge(n: Int, trust: Array<IntArray>): Int {
 
-        if (trust.isEmpty()) {
-            return if (n == 1) 1 else -1
+        if (trust.isEmpty()) return if (n == 1) 1 else -1
+
+        val count = IntArray(n + 1)
+        for (person in trust) {
+            count[person[0]]--
+            count[person[1]]++
         }
 
-        val graph = Array(n + 1) { BooleanArray(n + 1) }
-
-        for (item in trust) {
-            graph[item[1]][item[0]] = true
+        for (person in count.indices) {
+            if (count[person] == n - 1) return person
         }
-
-        for (i in graph.indices) {
-            var cur = 0
-
-            for (j in graph[i].indices) {
-                if (graph[i][j]) {
-                    cur++
-                }
-            }
-
-            if (cur == n-1) {
-                var trustSomeone = false
-                for (j in 0 .. n) {
-                    if (graph[j][i]) {
-                        trustSomeone = true
-                        break
-                    }
-                }
-                if (trustSomeone) {
-                    continue
-                } else {
-                    return i
-                }
-            }
-        }
-
         return -1
     }
 }
