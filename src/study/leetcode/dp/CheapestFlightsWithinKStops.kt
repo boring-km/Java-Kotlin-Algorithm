@@ -1,28 +1,59 @@
 package study.leetcode.dp
 
+import java.util.*
+
 
 // 실패
-// https://github.com/Cee/Leetcode/blob/master/787%20-%20Cheapest%20Flights%20Within%20K%20Stops.java
+// https://leetcode.com/problems/cheapest-flights-within-k-stops/solutions/2825208/cheapest-flights-within-k-stops/
 object CheapestFlightsWithinKStops {
     fun findCheapestPrice(n: Int, flights: Array<IntArray>, src: Int, dst: Int, k: Int): Int {
-        // dp -> 비용 기록 array
-        var prices = IntArray(n) { Int.MAX_VALUE }
-        prices[src] = 0 // 현재 0
-        for (i in 0..k) {   // k번 이동해야 한다. 무조건
-            val tempPrices = prices.clone()   // for문 돌면서 변경될 비용 기록
-            for (flight in flights) {
-                val cur = flight[0]
-                val next = flight[1]
-                val price = flight[2]
-                if (prices[cur] == Int.MAX_VALUE) continue  // 변경 기록 안함
-                // 다음 기록은 현재 값에서 + price이 다음으로 이동하려는 다른 변경보다 작은 비용일 때 변경됨
-                tempPrices[next] = tempPrices[next].coerceAtMost(prices[cur] + price)
-            }
-            // 변경 기록 저장
-            prices = tempPrices
+        val graph = HashMap<Int, MutableList<IntArray>>()
+        for (flight in flights) {
+            graph.computeIfAbsent(flight[0]) { ArrayList() }.add(intArrayOf(flight[1], flight[2]))
         }
-        // 도달하지 못했다면 -1, 도달했다면 그 값 리턴
-        return if (prices[dst] == Int.MAX_VALUE) -1 else prices[dst]
+
+        return bfs(n, src, k, graph, dst)
+    }
+
+    private fun bfs(
+        n: Int,
+        src: Int,
+        k: Int,
+        graph: HashMap<Int, MutableList<IntArray>>,
+        dst: Int
+    ): Int {
+        val priceArray = IntArray(n) { Int.MAX_VALUE }
+
+        val queue: Deque<IntArray> = LinkedList()
+        queue.offer(intArrayOf(src, 0))
+        var stops = 0
+
+        // 무조건 k번 들려야한다.
+        while (stops <= k && !queue.isEmpty()) {
+            var size = queue.size
+            while (size-- > 0) {
+                val temp = queue.poll()
+
+                val current = temp[0]
+                val distance = temp[1]
+                // 더이상 이동할 곳이 없다면
+                if (!graph.containsKey(current)) continue
+
+                // 연결된 노드들
+                for (nextNode in graph[current]!!) {
+                    val position = nextNode[0]
+                    val price = nextNode[1]
+                    // 비용이 더 크면 이동하지 않음
+                    if (distance + price >= priceArray[position]) continue
+                    // 비용 업데이트
+                    priceArray[position] = distance + price
+                    // 다음 포지션 확인
+                    queue.offer(intArrayOf(position, priceArray[position]))
+                }
+            }
+            stops++
+        }
+        return if (priceArray[dst] == Int.MAX_VALUE) -1 else priceArray[dst]
     }
 }
 
