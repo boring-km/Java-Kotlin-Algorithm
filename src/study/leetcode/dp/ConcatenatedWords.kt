@@ -1,51 +1,36 @@
 package study.leetcode.dp
 
+import java.util.*
+
+
 object ConcatenatedWords {
     fun findAllConcatenatedWordsInADict(words: Array<String>): List<String> {
-
-        val map = HashMap<String, Boolean>()
-        words.forEach { map[it] = true }
-
-        val answer = mutableListOf<String>()
+        val ans = mutableListOf<String>()
+        val wordSet = HashSet(mutableListOf(*words))
+        val memo = HashMap<String, Boolean>()   // 정답 여부 기록
 
         for (word in words) {
-            var total = ""
-            var cur = ""
-            var count = 0
-            var temp = false
-
-            for (c in word) {
-                // 포함되는 걸 찾았다면 -> 근데 더 긴 key도 있을 수 있는데?
-                val key = cur + c
-                if (map.containsKey(key)) {
-                    if (temp && map.containsKey(c.toString())) {
-                        count++
-                    }
-                    if (total + key == word) {
-                        count++
-                        total += key
-                    }
-                    temp = true
-                    cur = key
-                    continue
-                } else if (!map.containsKey(key) && temp) {
-                    count++
-                    total += cur
-                    cur = c.toString()
-                    temp = false
-                } else {
-                    // 한글자씩 더하기
-                    cur += c
-                }
+            if (recursive(word, wordSet, memo)) {
+                ans.add(word)
             }
-
-            if (count >= 2 && total == word) {
-                answer.add(word)
-            }
-
         }
+        return ans
+    }
 
-        return answer
+    private fun recursive(word: String, wordSet: Set<String>, memo: MutableMap<String, Boolean>): Boolean {
+        if (memo.containsKey(word)) return memo[word]!!
+        for (i in 1 until word.length) {
+            val prefix = word.substring(0, i)
+            val suffix = word.substring(i)
+            if (wordSet.contains(prefix) &&
+                (wordSet.contains(suffix) || recursive(suffix, wordSet, memo))
+            ) {
+                memo[word] = true
+                return true
+            }
+        }
+        memo[word] = false
+        return false
     }
 }
 
