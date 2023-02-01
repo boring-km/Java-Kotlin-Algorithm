@@ -1,36 +1,25 @@
 package study.leetcode.string
 
+// 모범 답안
 object GreatestCommonDivisorStrings {
+    // 최대공약수 구하기
+    private fun gcd(x: Int, y: Int): Int {
+        return if (y == 0) {
+            x
+        } else {
+            gcd(y, x % y)
+        }
+    }
+
     fun gcdOfStrings(str1: String, str2: String): String {
-        var answer = ""
-
-        val target = if (str1.length > str2.length) str1 else str2
-
-        for (i in 1 .. target.length) {
-            val s = StringBuilder()
-            val temp = target.substring(0, i)
-
-            if (str1.length % temp.length == 0 && str2.length % temp.length == 0) {
-
-                for (k in 0 until (str1.length / temp.length)) {
-                    s.append(temp)
-                }
-                var result = s.toString() == str1
-                s.clear()
-
-                for (k in 0 until (str2.length / temp.length)) {
-                    s.append(temp)
-                }
-
-                result = result && s.toString() == str2
-
-                if (result) {
-                    answer = temp
-                }
-            }
+        // Check if they have non-zero GCD string. ex) LEET, CODE
+        // 앞뒤가 바뀌어도 붙이면 같아야함
+        if (str1 + str2 != str2 + str1) {
+            return ""
         }
 
-
-        return answer
+        // Get the GCD of the two lengths.
+        val gcdLength = gcd(str1.length, str2.length)
+        return str1.substring(0, gcdLength)
     }
 }
