@@ -1,50 +1,25 @@
 package study.leetcode.string
 
+
 object FindAllAnagrams {
     fun findAnagrams(s: String, p: String): List<Int> {
-        val result = mutableListOf<Int>()
+        val ans: MutableList<Int> = ArrayList()
+        val count = IntArray(128)
+        var required = p.length
 
-        val n = s.length
-        val m = p.length
-
-        val map = HashMap<Char, Int>()
-        for (c in p) {
-            if (map.containsKey(c)) {
-                map[c] = map[c]!! + 1
-            } else {
-                map[c] = 1
+        for (c in p.toCharArray()) {
+            ++count[c.code]
+        }
+        var l = 0
+        for (r in s.indices){
+            if (--count[s[r].code] >= 0) --required
+            while (required == 0) {
+                if (r - l + 1 == p.length) ans.add(l)
+                if (++count[s[l++].code] > 0) ++required
             }
         }
 
-        for (i in 0 .. n - m) {
-            val temp = HashMap<Char, Int>()
-            for (c in s.substring(i, i+m)) {
-                if (temp.containsKey(c)) {
-                    temp[c] = temp[c]!! + 1
-                } else {
-                    temp[c] = 1
-                }
-            }
-            if (isEqual(map, temp)) {
-                result.add(i)
-            }
-        }
-
-        return result
-    }
-
-    private fun isEqual(
-        map: HashMap<Char, Int>,
-        temp: HashMap<Char, Int>
-    ): Boolean {
-        var check = true
-        for (key in map.keys) {
-            if (map[key] != temp[key]) {
-                check = false
-                break
-            }
-        }
-        return check
+        return ans
     }
 }
 
