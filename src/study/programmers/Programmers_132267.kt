@@ -1,6 +1,6 @@
 package study.programmers
 
-fun solution(a: Int, b: Int, n: Int): Int {
+private fun solution(a: Int, b: Int, n: Int): Int {
 
     var emptyBottle = n
     var drink = 0
