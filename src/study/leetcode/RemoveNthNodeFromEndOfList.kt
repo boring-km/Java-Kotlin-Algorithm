@@ -17,9 +17,9 @@ object RemoveNthNodeFromEndOfList {
             return
         }
         if (count < target || target < count) {
-            val newNodeValue = original?.next?.`val`
+            val newNodeValue: Int? = original?.next?.`val`
             curNode?.next = ListNode(newNodeValue!!)
-            recursive(curNode?.next, original.next, count + 1, target, length)
+            recursive(curNode?.next, original?.next, count + 1, target, length)
         } else {
             recursive(curNode, original?.next, count + 1, target, length)
         }
